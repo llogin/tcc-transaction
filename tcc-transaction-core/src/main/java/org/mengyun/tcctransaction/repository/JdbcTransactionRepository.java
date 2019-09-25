@@ -19,13 +19,24 @@ import java.util.List;
  * Created by changmingxie on 10/30/15.
  */
 public class JdbcTransactionRepository extends CachableTransactionRepository {
-
+    /**
+     * 领域
+     * 领域，或者也可以称为模块名，应用名，用于唯一标识一个资源。例如，Maven 模块 xxx-order，我们可以配置该属性为 ORDER。
+     */
     private String domain;
-
+    /**
+     * 表后缀
+     * 表后缀。默认存储表名为 TCC_TRANSACTION，配置表名后，为 TCC_TRANSACTION${tbSuffix}
+     */
     private String tbSuffix;
-
+    /**
+     *存储数据的数据源
+     */
     private DataSource dataSource;
-
+    /**
+     * 序列化
+     * 序列化。当数据库里已经有数据的情况下，不要更换别的序列化，否则会导致反序列化报错。建议：TCC-Transaction 存储时，新增字段，记录序列化的方式。
+     */
     private ObjectSerializer serializer = new KryoPoolSerializer();
 
     public String getDomain() {

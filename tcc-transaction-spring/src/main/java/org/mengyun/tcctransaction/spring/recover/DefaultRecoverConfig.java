@@ -9,19 +9,28 @@ import java.util.Set;
 
 /**
  * Created by changming.xie on 6/1/16.
+ * 默认事务恢复配置实现
  */
 public class DefaultRecoverConfig implements RecoverConfig {
 
     public static final RecoverConfig INSTANCE = new DefaultRecoverConfig();
-
+    /**
+     * 最大重试次数
+     */
     private int maxRetryCount = 30;
-
+    /**
+     * 恢复间隔时间，单位：秒
+     */
     private int recoverDuration = 120; //120 seconds
-
+    /**
+     * cron 表达式
+     */
     private String cronExpression = "0 */1 * * * ?";
 
     private int asyncTerminateThreadPoolSize = 1024;
-
+    /**
+     * 延迟取消异常集合
+     */
     private Set<Class<? extends Exception>> delayCancelExceptions = new HashSet<Class<? extends Exception>>();
 
     public DefaultRecoverConfig() {

@@ -12,13 +12,22 @@ import java.lang.reflect.Method;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface Compensable {
-
+    /**
+     * 传播级别
+     */
     public Propagation propagation() default Propagation.REQUIRED;
-
+    /**
+     * 确认执行业务方法
+     */
     public String confirmMethod() default "";
-
+    /**
+     * 取消执行业务方法
+     */
     public String cancelMethod() default "";
-
+    /**
+     * 事务上下文编辑
+     * 事务上下文编辑器( TransactionContextEditor )，用于设置和获得事务上下文( TransactionContext )，在「6.3 资源协调者拦截器」可以看到被调用，此处只看它的代码实现
+     */
     public Class<? extends TransactionContextEditor> transactionContextEditor() default DefaultTransactionContextEditor.class;
 
     public Class<? extends Exception>[] delayCancelExceptions() default {};
@@ -58,10 +67,15 @@ public @interface Compensable {
 
             int position = getTransactionContextParamPosition(method.getParameterTypes());
             if (position >= 0) {
-                args[position] = transactionContext;
+                args[position] = transactionContext; // 设置方法参数
             }
         }
-
+        /**
+         * 获得事务上下文在方法参数里的位置
+         *
+         * @param parameterTypes 参数类型集合
+         * @return 位置
+         */
         public static int getTransactionContextParamPosition(Class<?>[] parameterTypes) {
 
             int position = -1;

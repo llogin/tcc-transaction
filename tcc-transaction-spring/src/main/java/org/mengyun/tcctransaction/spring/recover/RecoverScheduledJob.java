@@ -9,6 +9,7 @@ import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 
 /**
  * Created by changming.xie on 6/2/16.
+ * 事务恢复定时任务
  */
 public class RecoverScheduledJob {
 
@@ -25,7 +26,7 @@ public class RecoverScheduledJob {
             jobDetail.setTargetObject(transactionRecovery);
             jobDetail.setTargetMethod("startRecover");
             jobDetail.setName("transactionRecoveryJob");
-            jobDetail.setConcurrent(false);
+            jobDetail.setConcurrent(false);// 禁止并发
             jobDetail.afterPropertiesSet();
 
             CronTriggerFactoryBean cronTrigger = new CronTriggerFactoryBean();

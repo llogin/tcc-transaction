@@ -5,14 +5,24 @@ import java.math.BigDecimal;
 
 /**
  * Created by twinkle.zhou on 16/11/10.
+ * 商品表
  */
 public class Product implements Serializable{
+    /**
+     * 商品编号
+     */
     private long productId;
-
+    /**
+     * 商店编号
+     */
     private long shopId;
-
+    /**
+     * 商品名
+     */
     private String productName;
-
+    /**
+     * 单价
+     */
     private BigDecimal price;
 
     public Product() {

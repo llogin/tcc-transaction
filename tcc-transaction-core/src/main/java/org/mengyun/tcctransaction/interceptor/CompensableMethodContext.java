@@ -29,9 +29,13 @@ public class CompensableMethodContext {
 
     public CompensableMethodContext(ProceedingJoinPoint pjp) {
         this.pjp = pjp;
+        // 获得带 @Compensable 注解的方法
         this.method = getCompensableMethod();
+        // 获取Compensable注解
         this.compensable = method.getAnnotation(Compensable.class);
+        // 获取传播级别
         this.propagation = compensable.propagation();
+        // 获得 事务上下文
         this.transactionContext = FactoryBuilder.factoryOf(compensable.transactionContextEditor()).getInstance().get(pjp.getTarget(), method, pjp.getArgs());
 
     }
@@ -83,12 +87,20 @@ public class CompensableMethodContext {
         }
         return method;
     }
-
+    /**
+     * 获取方法类型
+     *
+     * @param isTransactionActive 事务是否已开启
+     * @return 方法类型
+     */
     public MethodRole getMethodRole(boolean isTransactionActive) {
-        if ((propagation.equals(Propagation.REQUIRED) && !isTransactionActive && transactionContext == null) ||
-                propagation.equals(Propagation.REQUIRES_NEW)) {
+        if ((propagation.equals(Propagation.REQUIRED) && !isTransactionActive && transactionContext == null) // Propagation.REQUIRED：支持当前事务，当前没有事务，就新建一个事务。
+                ||
+                propagation.equals(Propagation.REQUIRES_NEW)) { // Propagation.REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起。
             return MethodRole.ROOT;
-        } else if ((propagation.equals(Propagation.REQUIRED) || propagation.equals(Propagation.MANDATORY)) && !isTransactionActive && transactionContext != null) {
+        } else if ((propagation.equals(Propagation.REQUIRED)// Propagation.REQUIRED：支持当前事务
+                || propagation.equals(Propagation.MANDATORY))  // Propagation.MANDATORY：支持当前事务
+                && !isTransactionActive && transactionContext != null) {
             return MethodRole.PROVIDER;
         } else {
             return MethodRole.NORMAL;

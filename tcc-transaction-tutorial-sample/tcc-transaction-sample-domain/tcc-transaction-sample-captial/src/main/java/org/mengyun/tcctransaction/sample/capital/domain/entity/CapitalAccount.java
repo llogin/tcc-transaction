@@ -8,13 +8,20 @@ import java.math.BigDecimal;
 
 /**
  * Created by changming.xie on 4/2/16.
+ * 资金账户余额
  */
 public class CapitalAccount {
-
+    /**
+     * 账户编号
+     */
     private long id;
-
+    /**
+     * 用户编号
+     */
     private long userId;
-
+    /**
+     * 余额
+     */
     private BigDecimal balanceAmount;
 
     private BigDecimal transferAmount = BigDecimal.ZERO;
